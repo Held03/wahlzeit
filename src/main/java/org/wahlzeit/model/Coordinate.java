@@ -77,13 +77,7 @@ public class Coordinate {
 	}
 	
 	public boolean isEqual(Coordinate other) {
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
-			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
-			return false;
-		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
-			return false;
-		return true;
+		return (x == other.x && y == other.y && z == other.z);
 	}
 
 	/**
@@ -110,6 +104,8 @@ public class Coordinate {
 		return z;
 	}
 
-	
+	public String toString() {
+		return String.format("[%.3f, %.3f, %.3f]", x, y, z);
+	}
 	
 }
