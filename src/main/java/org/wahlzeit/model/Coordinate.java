@@ -45,7 +45,7 @@ public class Coordinate {
 		double dy = this.y - other.y;
 		double dz = this.z - other.z;
 		
-		double sqDist = dx*dx + dy*dx + dz*dz;
+		double sqDist = dx*dx + dy*dy + dz*dz;
 		
 		return Math.sqrt(sqDist);
 	}

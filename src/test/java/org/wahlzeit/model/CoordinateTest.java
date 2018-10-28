@@ -17,6 +17,9 @@ public class CoordinateTest {
 	 * Halve of the double precision
 	 */
 	private static final double ε = 1e-26;
+	private static final double SqrtOf2 = Math.sqrt(2.0);
+	private static final double SqrtOf3 = Math.sqrt(3.0);
+	private static final double SqrtOf6 = Math.sqrt(6.0);
 	
 	private static final Coordinate ONE = new Coordinate(1.0, 1.0, 1.0);
 	private static final Coordinate MINUS_ONE = new Coordinate(-1.0, -1.0, -1.0);
@@ -40,6 +43,10 @@ public class CoordinateTest {
 	public void tearDown() throws Exception {
 	}
 	
+	protected void assertDoubleEq(double d1, double d2) {
+		assert(Math.abs(d1-d2) <= ε * Math.abs(d1+d2));
+	}
+	
 	protected Coordinate newRandomCoordinate() {
 		return new Coordinate(rng.nextDouble(), rng.nextDouble(), rng.nextDouble());
 	}
@@ -58,7 +65,7 @@ public class CoordinateTest {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
 		double dz = z1 - z2;
-		return Math.sqrt(dx*dx + dy*dx + dz*dz);
+		return Math.sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
 	@Test
@@ -147,6 +154,69 @@ public class CoordinateTest {
 			}
 			
 			assertNotEquals(c1, c2);
+		});
+	}
+	
+	@Test
+	public void testZeroDistance() {
+		assert(Coordinate.ORIGIN.getDistance(Coordinate.ORIGIN) == 0.0);
+		assert(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_X) == 0.0);
+		assert(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Y) == 0.0);
+		assert(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Z) == 0.0);
+
+		assert(ONE.getDistance(ONE) == 0.0);
+		assert(MINUS_ONE.getDistance(MINUS_ONE) == 0.0);
+		assert(Coordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
+		assert(MINUS_ZERO.getDistance(MINUS_ZERO) == 0.0);
+
+		assert(Double.isNaN(NAN.getDistance(NAN)));
+	}
+	
+	@Test
+	public void testOneDistance() {
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.ORIGIN), 1.0);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.ORIGIN), 1.0);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.ORIGIN), 1.0);
+
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(MINUS_ZERO), 1.0);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(MINUS_ZERO), 1.0);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(MINUS_ZERO), 1.0);
+	}
+	
+	@Test
+	public void testSomeDistance() {
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_Z), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_X), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Y), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_Y), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Z), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_X), SqrtOf2);
+
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(ONE), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(ONE), SqrtOf2);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(ONE), SqrtOf2);
+
+		assertDoubleEq(Coordinate.ORIGIN.getDistance(ONE), SqrtOf3);
+		assertDoubleEq(Coordinate.ORIGIN.getDistance(MINUS_ONE), SqrtOf3);
+		assertDoubleEq(MINUS_ZERO.getDistance(ONE), SqrtOf3);
+		assertDoubleEq(MINUS_ZERO.getDistance(MINUS_ONE), SqrtOf3);
+
+		assertDoubleEq(Coordinate.UNIT_X.getDistance(MINUS_ONE), SqrtOf6);
+		assertDoubleEq(Coordinate.UNIT_Y.getDistance(MINUS_ONE), SqrtOf6);
+		assertDoubleEq(Coordinate.UNIT_Z.getDistance(MINUS_ONE), SqrtOf6);
+	}
+	
+	@Test
+	public void testDistanceRandom() {
+		runMultibletimes(() -> {
+			Coordinate c1 = newRandomCoordinate();
+			Coordinate c2 = newRandomCoordinate();
+			
+			double dist = euclidDistance(c1.x, c2.x, c1.y, c2.y, c1.z, c2.z);
+
+			assertDoubleEq(c1.getDistance(c2), dist);
+			assertDoubleEq(c2.getDistance(c1), dist);
+			assertDoubleEq(c1.getDistance(c2), c2.getDistance(c1));
 		});
 	}
 
