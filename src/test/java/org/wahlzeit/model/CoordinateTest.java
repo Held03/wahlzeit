@@ -69,6 +69,21 @@ public class CoordinateTest {
 	}
 
 	@Test
+	public void testConstructorRandom() {
+		runMultibletimes(() -> {
+			double x = rng.nextDouble(),
+					y = rng.nextDouble(),
+					z = rng.nextDouble();
+			
+			Coordinate c = new Coordinate(x, y, z);
+			
+			assert(x == c.x);
+			assert(y == c.y);
+			assert(z == c.z);
+		});
+	}
+
+	@Test
 	public void testEqualityIdentity() {
 		assertEquals(Coordinate.ORIGIN, Coordinate.ORIGIN);
 		assertEquals(Coordinate.UNIT_X, Coordinate.UNIT_X);
@@ -118,7 +133,7 @@ public class CoordinateTest {
 	}
 
 	@Test
-	public void testInequality1() {
+	public void testInequality() {
 		assertNotEquals(Coordinate.UNIT_X, Coordinate.UNIT_Y);
 		assertNotEquals(Coordinate.UNIT_Y, Coordinate.UNIT_Z);
 		assertNotEquals(Coordinate.UNIT_Z, Coordinate.UNIT_X);
