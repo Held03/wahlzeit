@@ -1,5 +1,11 @@
-/**
+/*
+ * Coordinate
  * 
+ * Version: 2018-10-29
+ *
+ * Date: Oct 29, 2018
+ *
+ * Copyright: AGPL-3
  */
 package org.wahlzeit.model;
 
