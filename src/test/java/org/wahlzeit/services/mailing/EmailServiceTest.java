@@ -24,18 +24,40 @@ import org.junit.Before;
 import org.junit.Test;
 import org.wahlzeit.services.EmailAddress;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.activation.DataHandler;
+import javax.mail.Address;
+import javax.mail.Flags;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Message.RecipientType;
+import javax.mail.internet.MimeMessage;
 
 public class EmailServiceTest {
 
 	EmailService emailService = null;
 	EmailAddress validAddress = null;
+	EmailAddress validAddress2 = null;
+	EmailAddress validAddress3 = null;
 
 	@Before
 	public void setup() throws Exception {
 		emailService = EmailServiceManager.getDefaultService();
 		validAddress = EmailAddress.getFromString("test@test.de");
+		validAddress2 = EmailAddress.getFromString("test@fau.de");
+		validAddress3 = EmailAddress.getFromString("fau@test.de");
 	}
 
 	@Test
@@ -56,5 +78,100 @@ public class EmailServiceTest {
 		} catch (Exception ex) {
 			Assert.fail("Silent mode does not allow exceptions");
 		}
+	}
+	
+	@Test
+	public void testAbstractEmailServiceSendEmailWithoutBCC() {
+		AtomicBoolean composed = new AtomicBoolean(false);
+		AtomicBoolean deliverd = new AtomicBoolean(false);
+		
+		String theSubject = "The subject";
+		String theBody = "The email body";
+		
+		// Dummy message
+		MimeMessage mm = new MimeMessage((Session) null);
+		
+		EmailService emailService = new AbstractEmailService() {
+
+			@Override
+			protected Message doCreateEmail(EmailAddress from, EmailAddress to, EmailAddress bcc, String subject,
+					String body) throws MailingException {
+				// Test arguments
+				assertEquals(validAddress, from);
+				assertEquals(validAddress2, to);
+				assertEquals(EmailAddress.EMPTY, bcc);
+				assertEquals(theSubject, subject);
+				assertEquals(theBody, body);
+				
+				// Assert a single invocation
+				assertFalse(composed.getAndSet(true));
+				
+				// Return dummy
+				return mm;
+			}
+
+			@Override
+			protected void doSendEmail(Message msg) throws MailingException {
+				// Test argument
+				assertEquals(mm, msg);
+				
+				// Assert single invocation
+				assertFalse(deliverd.getAndSet(true));
+			}
+			
+		};
+		
+		assertTrue(emailService.sendEmailIgnoreException(validAddress, validAddress2, theSubject, theBody));
+		
+		// Assert successful invocations
+		assertTrue(composed.get());
+		assertTrue(deliverd.get());
+	}
+	
+	@Test
+	public void testAbstractEmailServiceSendEmailWithBCC() {
+		AtomicBoolean composed = new AtomicBoolean(false);
+		AtomicBoolean deliverd = new AtomicBoolean(false);
+		
+		String theSubject = "The subject";
+		String theBody = "The email body";
+		
+		MimeMessage mm = new MimeMessage((Session) null);
+		
+		EmailService emailService = new AbstractEmailService() {
+
+			@Override
+			protected Message doCreateEmail(EmailAddress from, EmailAddress to, EmailAddress bcc, String subject,
+					String body) throws MailingException {
+				// Test arguments
+				assertEquals(validAddress, from);
+				assertEquals(validAddress2, to);
+				assertEquals(validAddress3, bcc);
+				assertEquals(theSubject, subject);
+				assertEquals(theBody, body);
+				
+				// Assert a single invocation
+				assertFalse(composed.getAndSet(true));
+				
+				// Return dummy
+				return mm;
+			}
+
+			@Override
+			protected void doSendEmail(Message msg) throws MailingException {
+				// Test argument
+				assertEquals(mm, msg);
+				
+				// Assert single invocation
+				assertFalse(deliverd.getAndSet(true));
+			}
+			
+		};
+		
+		assertTrue(emailService.sendEmailIgnoreException(validAddress, validAddress2, validAddress3, theSubject, theBody));
+		
+		// Assert successful invocations
+		assertTrue(composed.get());
+		assertTrue(deliverd.get());
 	}
 }
