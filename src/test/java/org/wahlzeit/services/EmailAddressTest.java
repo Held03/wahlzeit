@@ -66,5 +66,31 @@ public class EmailAddressTest extends TestCase {
 		assertFalse(EmailAddress.EMPTY.isValid());
 	}
 
+	/**
+	 *
+	 */
+	public void testIsEmpty() {
+		assertTrue(EmailAddress.EMPTY.isEmpty());
+		assertTrue(EmailAddress.getFromString("").isEmpty());
+		
+		assertFalse(EmailAddress.getFromString("foo").isEmpty());
+		assertFalse(EmailAddress.getFromString("foo").isEmpty());
+		assertFalse(EmailAddress.getFromString(" ").isEmpty());
+		assertFalse(EmailAddress.getFromString("example@fau.de").isEmpty());
+	}
+
+
+	/**
+	 *
+	 */
+	public void testAsInternetAddress() {
+		assertNotNull(EmailAddress.getFromString("example@fau.de").asInternetAddress());
+		assertNotNull(EmailAddress.getFromString("foo.bar").asInternetAddress());
+		assertNotNull(EmailAddress.getFromString("foo").asInternetAddress());
+		
+		assertNull(EmailAddress.getFromString(" ").asInternetAddress());
+		assertNull(EmailAddress.getFromString("").asInternetAddress());
+	}
+
 }
 

@@ -114,7 +114,6 @@ public class EmailAddress implements Serializable {
 	/**
 	 *
 	 */
-
 	public boolean isValid() {
 		return !isEmpty();
 	}
