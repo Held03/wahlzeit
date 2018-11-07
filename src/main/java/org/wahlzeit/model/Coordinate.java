@@ -47,6 +47,10 @@ public class Coordinate {
 	 * @return the distance
 	 */
 	public double getDistance(Coordinate other) {
+		if (other == null) {
+			throw new IllegalArgumentException("Other coordinate must not be null");
+		}
+		
 		double dx = this.x - other.x;
 		double dy = this.y - other.y;
 		double dz = this.z - other.z;
@@ -83,6 +87,8 @@ public class Coordinate {
 	}
 	
 	public boolean isEqual(Coordinate other) {
+		if (other == null)
+			return false;
 		return (x == other.x && y == other.y && z == other.z);
 	}
 

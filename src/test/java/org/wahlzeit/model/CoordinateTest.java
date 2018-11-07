@@ -10,7 +10,9 @@
 package org.wahlzeit.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -132,6 +134,14 @@ public class CoordinateTest {
 		
 		assertEquals(NAN.hashCode(), copyCoordinate(NAN).hashCode());
 	}
+	
+	@Test
+	public void testEqualityWithNull() {
+		assertNotEquals(Coordinate.ORIGIN, null);
+		assertNotEquals(null, Coordinate.ORIGIN);
+		
+		assertFalse(Coordinate.ORIGIN.isEqual(null));
+	}
 
 	@Test
 	public void testEqualityCopyRandom() {
@@ -180,20 +190,26 @@ public class CoordinateTest {
 			assertNotEquals(c1, c2);
 		});
 	}
+
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullDistance() {
+		Coordinate.ORIGIN.getDistance(null);
+	}
 	
 	@Test
 	public void testZeroDistance() {
-		assert(Coordinate.ORIGIN.getDistance(Coordinate.ORIGIN) == 0.0);
-		assert(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_X) == 0.0);
-		assert(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Y) == 0.0);
-		assert(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Z) == 0.0);
+		assertTrue(Coordinate.ORIGIN.getDistance(Coordinate.ORIGIN) == 0.0);
+		assertTrue(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_X) == 0.0);
+		assertTrue(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Y) == 0.0);
+		assertTrue(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Z) == 0.0);
 
-		assert(ONE.getDistance(ONE) == 0.0);
-		assert(MINUS_ONE.getDistance(MINUS_ONE) == 0.0);
-		assert(Coordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
-		assert(MINUS_ZERO.getDistance(MINUS_ZERO) == 0.0);
+		assertTrue(ONE.getDistance(ONE) == 0.0);
+		assertTrue(MINUS_ONE.getDistance(MINUS_ONE) == 0.0);
+		assertTrue(Coordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
+		assertTrue(MINUS_ZERO.getDistance(MINUS_ZERO) == 0.0);
 
-		assert(Double.isNaN(NAN.getDistance(NAN)));
+		assertTrue(Double.isNaN(NAN.getDistance(NAN)));
 	}
 	
 	@Test
