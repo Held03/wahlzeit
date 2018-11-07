@@ -19,31 +19,20 @@
  */
 package org.wahlzeit.services.mailing;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.wahlzeit.services.EmailAddress;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.activation.DataHandler;
-import javax.mail.Address;
-import javax.mail.Flags;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.MimeMessage;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.wahlzeit.services.EmailAddress;
 
 public class EmailServiceTest {
 
