@@ -14,6 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	LocationTest.class,
 	MandelbrotPhotoTest.class,
 	MandelbrotPhotoFactoryTest.class,
+	MandelbrotPhotoManagerTest.class,
 	PhotoFilterTest.class,
 	TagsTest.class,
 	UserStatusTest.class,
