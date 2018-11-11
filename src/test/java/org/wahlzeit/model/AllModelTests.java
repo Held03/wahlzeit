@@ -13,6 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	GuestTest.class,
 	LocationTest.class,
 	MandelbrotPhotoTest.class,
+	MandelbrotPhotoFactoryTest.class,
 	PhotoFilterTest.class,
 	TagsTest.class,
 	UserStatusTest.class,
