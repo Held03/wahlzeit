@@ -32,12 +32,12 @@ public class CoordinateTest {
 	private static final double SqrtOf3 = Math.sqrt(3.0);
 	private static final double SqrtOf6 = Math.sqrt(6.0);
 	
-	private static final Coordinate ONE = new Coordinate(1.0, 1.0, 1.0);
-	private static final Coordinate MINUS_ONE = new Coordinate(-1.0, -1.0, -1.0);
-	private static final Coordinate MINUS_ZERO = new Coordinate(-0.0, -0.0, -0.0);
-	private static final Coordinate INF = new Coordinate(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-	private static final Coordinate MINUS_INF = new Coordinate(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
-	private static final Coordinate NAN = new Coordinate(Double.NaN, Double.NaN, Double.NaN);
+	private static final CartesianCoordinate ONE = new CartesianCoordinate(1.0, 1.0, 1.0);
+	private static final CartesianCoordinate MINUS_ONE = new CartesianCoordinate(-1.0, -1.0, -1.0);
+	private static final CartesianCoordinate MINUS_ZERO = new CartesianCoordinate(-0.0, -0.0, -0.0);
+	private static final CartesianCoordinate INF = new CartesianCoordinate(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+	private static final CartesianCoordinate MINUS_INF = new CartesianCoordinate(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+	private static final CartesianCoordinate NAN = new CartesianCoordinate(Double.NaN, Double.NaN, Double.NaN);
 	
 	private static Random rng;
 	
@@ -58,8 +58,8 @@ public class CoordinateTest {
 		assert(Math.abs(d1-d2) <= ε * Math.abs(d1+d2));
 	}
 	
-	protected Coordinate newRandomCoordinate() {
-		return new Coordinate(rng.nextDouble(), rng.nextDouble(), rng.nextDouble());
+	protected CartesianCoordinate newRandomCoordinate() {
+		return new CartesianCoordinate(rng.nextDouble(), rng.nextDouble(), rng.nextDouble());
 	}
 	
 	protected void runMultibletimes(Runnable r) {
@@ -68,8 +68,8 @@ public class CoordinateTest {
 		}
 	}
 	
-	protected Coordinate copyCoordinate(Coordinate o) {
-		return new Coordinate(o.x, o.y, o.z);
+	protected CartesianCoordinate copyCoordinate(CartesianCoordinate o) {
+		return new CartesianCoordinate(o.x, o.y, o.z);
 	}
 	
 	protected double euclidDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
@@ -86,7 +86,7 @@ public class CoordinateTest {
 					y = rng.nextDouble(),
 					z = rng.nextDouble();
 			
-			Coordinate c = new Coordinate(x, y, z);
+			CartesianCoordinate c = new CartesianCoordinate(x, y, z);
 			
 			assert(x == c.x);
 			assert(y == c.y);
@@ -96,10 +96,10 @@ public class CoordinateTest {
 
 	@Test
 	public void testEqualityIdentity() {
-		assertEquals(Coordinate.ORIGIN, Coordinate.ORIGIN);
-		assertEquals(Coordinate.UNIT_X, Coordinate.UNIT_X);
-		assertEquals(Coordinate.UNIT_Y, Coordinate.UNIT_Y);
-		assertEquals(Coordinate.UNIT_Z, Coordinate.UNIT_Z);
+		assertEquals(CartesianCoordinate.ORIGIN, CartesianCoordinate.ORIGIN);
+		assertEquals(CartesianCoordinate.UNIT_X, CartesianCoordinate.UNIT_X);
+		assertEquals(CartesianCoordinate.UNIT_Y, CartesianCoordinate.UNIT_Y);
+		assertEquals(CartesianCoordinate.UNIT_Z, CartesianCoordinate.UNIT_Z);
 		
 		assertEquals(ONE, ONE);
 		assertEquals(MINUS_ONE, MINUS_ONE);
@@ -114,17 +114,17 @@ public class CoordinateTest {
 	@Test
 	public void testEqualityIdentityRandom() {
 		runMultibletimes(() -> {
-			Coordinate c = newRandomCoordinate();
+			CartesianCoordinate c = newRandomCoordinate();
 			assertEquals(c, c);
 		});
 	}
 	
 	@Test
 	public void testEqualityCopy() {
-		assertEquals(Coordinate.ORIGIN, copyCoordinate(Coordinate.ORIGIN));
-		assertEquals(Coordinate.UNIT_X, copyCoordinate(Coordinate.UNIT_X));
-		assertEquals(Coordinate.UNIT_Y, copyCoordinate(Coordinate.UNIT_Y));
-		assertEquals(Coordinate.UNIT_Z, copyCoordinate(Coordinate.UNIT_Z));
+		assertEquals(CartesianCoordinate.ORIGIN, copyCoordinate(CartesianCoordinate.ORIGIN));
+		assertEquals(CartesianCoordinate.UNIT_X, copyCoordinate(CartesianCoordinate.UNIT_X));
+		assertEquals(CartesianCoordinate.UNIT_Y, copyCoordinate(CartesianCoordinate.UNIT_Y));
+		assertEquals(CartesianCoordinate.UNIT_Z, copyCoordinate(CartesianCoordinate.UNIT_Z));
 		
 		assertEquals(ONE, copyCoordinate(ONE));
 		assertEquals(MINUS_ONE, copyCoordinate(MINUS_ONE));
@@ -137,37 +137,37 @@ public class CoordinateTest {
 	
 	@Test
 	public void testEqualityWithNull() {
-		assertNotEquals(Coordinate.ORIGIN, null);
-		assertNotEquals(null, Coordinate.ORIGIN);
+		assertNotEquals(CartesianCoordinate.ORIGIN, null);
+		assertNotEquals(null, CartesianCoordinate.ORIGIN);
 		
-		assertFalse(Coordinate.ORIGIN.isEqual(null));
+		assertFalse(CartesianCoordinate.ORIGIN.isEqual(null));
 	}
 
 	@Test
 	public void testEqualityCopyRandom() {
 		runMultibletimes(() -> {
-			Coordinate c = newRandomCoordinate();
+			CartesianCoordinate c = newRandomCoordinate();
 			assertEquals(c, copyCoordinate(c));
 		});
 	}
 
 	@Test
 	public void testInequality() {
-		assertNotEquals(Coordinate.UNIT_X, Coordinate.UNIT_Y);
-		assertNotEquals(Coordinate.UNIT_Y, Coordinate.UNIT_Z);
-		assertNotEquals(Coordinate.UNIT_Z, Coordinate.UNIT_X);
+		assertNotEquals(CartesianCoordinate.UNIT_X, CartesianCoordinate.UNIT_Y);
+		assertNotEquals(CartesianCoordinate.UNIT_Y, CartesianCoordinate.UNIT_Z);
+		assertNotEquals(CartesianCoordinate.UNIT_Z, CartesianCoordinate.UNIT_X);
 		
-		assertNotEquals(Coordinate.UNIT_X, Coordinate.UNIT_Z);
-		assertNotEquals(Coordinate.UNIT_Y, Coordinate.UNIT_X);
-		assertNotEquals(Coordinate.UNIT_Z, Coordinate.UNIT_Y);
+		assertNotEquals(CartesianCoordinate.UNIT_X, CartesianCoordinate.UNIT_Z);
+		assertNotEquals(CartesianCoordinate.UNIT_Y, CartesianCoordinate.UNIT_X);
+		assertNotEquals(CartesianCoordinate.UNIT_Z, CartesianCoordinate.UNIT_Y);
 		
-		assertNotEquals(Coordinate.UNIT_X, Coordinate.ORIGIN);
-		assertNotEquals(Coordinate.UNIT_Y, Coordinate.ORIGIN);
-		assertNotEquals(Coordinate.UNIT_Z, Coordinate.ORIGIN);
+		assertNotEquals(CartesianCoordinate.UNIT_X, CartesianCoordinate.ORIGIN);
+		assertNotEquals(CartesianCoordinate.UNIT_Y, CartesianCoordinate.ORIGIN);
+		assertNotEquals(CartesianCoordinate.UNIT_Z, CartesianCoordinate.ORIGIN);
 		
-		assertNotEquals(Coordinate.UNIT_X, ONE);
-		assertNotEquals(Coordinate.UNIT_Y, ONE);
-		assertNotEquals(Coordinate.UNIT_Z, ONE);
+		assertNotEquals(CartesianCoordinate.UNIT_X, ONE);
+		assertNotEquals(CartesianCoordinate.UNIT_Y, ONE);
+		assertNotEquals(CartesianCoordinate.UNIT_Z, ONE);
 		
 		assertNotEquals(ONE, MINUS_ONE);
 		assertNotEquals(MINUS_ONE, ONE);
@@ -180,8 +180,8 @@ public class CoordinateTest {
 	@Test
 	public void testInequalityRandom() {
 		runMultibletimes(() -> {
-			Coordinate c1 = newRandomCoordinate();
-			Coordinate c2 = newRandomCoordinate();
+			CartesianCoordinate c1 = newRandomCoordinate();
+			CartesianCoordinate c2 = newRandomCoordinate();
 			
 			if (c1.x == c2.x && c1.y == c2.y && c1.z == c2.z) {
 				return;
@@ -194,19 +194,19 @@ public class CoordinateTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullDistance() {
-		Coordinate.ORIGIN.getDistance(null);
+		CartesianCoordinate.ORIGIN.getDistance(null);
 	}
 	
 	@Test
 	public void testZeroDistance() {
-		assertTrue(Coordinate.ORIGIN.getDistance(Coordinate.ORIGIN) == 0.0);
-		assertTrue(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_X) == 0.0);
-		assertTrue(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Y) == 0.0);
-		assertTrue(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Z) == 0.0);
+		assertTrue(CartesianCoordinate.ORIGIN.getDistance(CartesianCoordinate.ORIGIN) == 0.0);
+		assertTrue(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.UNIT_X) == 0.0);
+		assertTrue(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.UNIT_Y) == 0.0);
+		assertTrue(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.UNIT_Z) == 0.0);
 
 		assertTrue(ONE.getDistance(ONE) == 0.0);
 		assertTrue(MINUS_ONE.getDistance(MINUS_ONE) == 0.0);
-		assertTrue(Coordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
+		assertTrue(CartesianCoordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
 		assertTrue(MINUS_ZERO.getDistance(MINUS_ZERO) == 0.0);
 
 		assertTrue(Double.isNaN(NAN.getDistance(NAN)));
@@ -214,43 +214,43 @@ public class CoordinateTest {
 	
 	@Test
 	public void testOneDistance() {
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.ORIGIN), 1.0);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.ORIGIN), 1.0);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.ORIGIN), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.ORIGIN), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.ORIGIN), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.ORIGIN), 1.0);
 
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(MINUS_ZERO), 1.0);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(MINUS_ZERO), 1.0);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(MINUS_ZERO), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(MINUS_ZERO), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(MINUS_ZERO), 1.0);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(MINUS_ZERO), 1.0);
 	}
 	
 	@Test
 	public void testSomeDistance() {
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_Z), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_X), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_Y), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(Coordinate.UNIT_Y), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(Coordinate.UNIT_Z), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(Coordinate.UNIT_X), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.UNIT_Z), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.UNIT_X), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.UNIT_Y), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.UNIT_Y), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.UNIT_Z), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.UNIT_X), SqrtOf2);
 
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(ONE), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(ONE), SqrtOf2);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(ONE), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(ONE), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(ONE), SqrtOf2);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(ONE), SqrtOf2);
 
-		assertDoubleEq(Coordinate.ORIGIN.getDistance(ONE), SqrtOf3);
-		assertDoubleEq(Coordinate.ORIGIN.getDistance(MINUS_ONE), SqrtOf3);
+		assertDoubleEq(CartesianCoordinate.ORIGIN.getDistance(ONE), SqrtOf3);
+		assertDoubleEq(CartesianCoordinate.ORIGIN.getDistance(MINUS_ONE), SqrtOf3);
 		assertDoubleEq(MINUS_ZERO.getDistance(ONE), SqrtOf3);
 		assertDoubleEq(MINUS_ZERO.getDistance(MINUS_ONE), SqrtOf3);
 
-		assertDoubleEq(Coordinate.UNIT_X.getDistance(MINUS_ONE), SqrtOf6);
-		assertDoubleEq(Coordinate.UNIT_Y.getDistance(MINUS_ONE), SqrtOf6);
-		assertDoubleEq(Coordinate.UNIT_Z.getDistance(MINUS_ONE), SqrtOf6);
+		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(MINUS_ONE), SqrtOf6);
+		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(MINUS_ONE), SqrtOf6);
+		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(MINUS_ONE), SqrtOf6);
 	}
 	
 	@Test
 	public void testDistanceRandom() {
 		runMultibletimes(() -> {
-			Coordinate c1 = newRandomCoordinate();
-			Coordinate c2 = newRandomCoordinate();
+			CartesianCoordinate c1 = newRandomCoordinate();
+			CartesianCoordinate c2 = newRandomCoordinate();
 			
 			double dist = euclidDistance(c1.x, c2.x, c1.y, c2.y, c1.z, c2.z);
 

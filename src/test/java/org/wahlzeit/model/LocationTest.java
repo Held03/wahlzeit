@@ -22,7 +22,7 @@ public class LocationTest {
 
 	@Before
 	public void setUp() throws Exception {
-		origin = new Location(Coordinate.ORIGIN);
+		origin = new Location(CartesianCoordinate.ORIGIN);
 	}
 
 	@After
@@ -31,37 +31,37 @@ public class LocationTest {
 
 	@Test
 	public void testContstructor() {
-		Location l = new Location(Coordinate.UNIT_X);
-		assertEquals(l.coordinate, Coordinate.UNIT_X);
-		assertNotEquals(l.coordinate, Coordinate.ORIGIN);
+		Location l = new Location(CartesianCoordinate.UNIT_X);
+		assertEquals(l.coordinate, CartesianCoordinate.UNIT_X);
+		assertNotEquals(l.coordinate, CartesianCoordinate.ORIGIN);
 		
-		l = new Location(Coordinate.UNIT_Y);
-		assertEquals(l.coordinate, Coordinate.UNIT_Y);
-		assertNotEquals(l.coordinate, Coordinate.ORIGIN);
+		l = new Location(CartesianCoordinate.UNIT_Y);
+		assertEquals(l.coordinate, CartesianCoordinate.UNIT_Y);
+		assertNotEquals(l.coordinate, CartesianCoordinate.ORIGIN);
 		
-		l = new Location(Coordinate.UNIT_Z);
-		assertEquals(l.coordinate, Coordinate.UNIT_Z);
-		assertNotEquals(l.coordinate, Coordinate.ORIGIN);
+		l = new Location(CartesianCoordinate.UNIT_Z);
+		assertEquals(l.coordinate, CartesianCoordinate.UNIT_Z);
+		assertNotEquals(l.coordinate, CartesianCoordinate.ORIGIN);
 	}
 
 	@Test
 	public void testSet() {
-		assertEquals(origin.coordinate, Coordinate.ORIGIN);
+		assertEquals(origin.coordinate, CartesianCoordinate.ORIGIN);
 		
-		origin.setCoordinate(Coordinate.UNIT_X);
-		assertEquals(origin.coordinate, Coordinate.UNIT_X);
+		origin.setCoordinate(CartesianCoordinate.UNIT_X);
+		assertEquals(origin.coordinate, CartesianCoordinate.UNIT_X);
 		
-		origin.setCoordinate(Coordinate.UNIT_Y);
-		assertEquals(origin.coordinate, Coordinate.UNIT_Y);
+		origin.setCoordinate(CartesianCoordinate.UNIT_Y);
+		assertEquals(origin.coordinate, CartesianCoordinate.UNIT_Y);
 		
-		origin.setCoordinate(Coordinate.UNIT_Z);
-		assertEquals(origin.coordinate, Coordinate.UNIT_Z);
+		origin.setCoordinate(CartesianCoordinate.UNIT_Z);
+		assertEquals(origin.coordinate, CartesianCoordinate.UNIT_Z);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testContstructorNull() {
 		Location l = new Location(null);
-		assertNotEquals(l.coordinate, Coordinate.ORIGIN);
+		assertNotEquals(l.coordinate, CartesianCoordinate.ORIGIN);
 		fail();
 	}
 
@@ -69,7 +69,7 @@ public class LocationTest {
 	public void testSetNull() {
 		assertNotEquals(origin.coordinate, null);
 		origin.setCoordinate(null);
-		assertNotEquals(origin.coordinate, Coordinate.ORIGIN);
+		assertNotEquals(origin.coordinate, CartesianCoordinate.ORIGIN);
 		fail();
 	}
 
