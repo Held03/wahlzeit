@@ -32,7 +32,7 @@ public interface Coordinate {
 	 * }
 	 * </pre>
 	 */
-	static double εZ = 1e-300;
+	static double εZ = 1e-14;
 	
 	public CartesianCoordinate asCartesianCoordinate();
 	public SphericCoordinate asSphericCoordinate();

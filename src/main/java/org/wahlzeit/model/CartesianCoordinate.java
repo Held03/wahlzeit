@@ -99,13 +99,13 @@ public class CartesianCoordinate implements Coordinate {
 	 */
 	protected boolean cmp(double a, double b) {
 		return (Math.abs(a) < εZ & Math.abs(b) < εZ) //
-				| (Math.abs(a-b) < Math.abs(a+b)*εS);
+				| (Math.abs(a-b) <= εS);
 	}
 	
 	public boolean isEqual(CartesianCoordinate other) {
 		if (other == null)
 			return false;
-		
+
 		return (cmp(x, other.x) & cmp(y, other.y) & cmp(z, other.z));
 	}
 
@@ -149,12 +149,18 @@ public class CartesianCoordinate implements Coordinate {
 
 	@Override
 	public double getCartesianDistance(Coordinate other) {
+		if (other == null)
+			throw new IllegalArgumentException("Other coordinate must not be null");
+		
 		CartesianCoordinate ccOther = other.asCartesianCoordinate();
 		return getDistance(ccOther);
 	}
 
 	@Override
 	public double getCentralAngle(Coordinate other) {
+		if (other == null)
+			throw new IllegalArgumentException("Other coordinate must not be null");
+		
 		CartesianCoordinate cc = other.asCartesianCoordinate();
 		
 		// the central angle between a and b is equal to
