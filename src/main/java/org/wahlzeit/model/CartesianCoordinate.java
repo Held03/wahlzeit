@@ -35,6 +35,10 @@ public class CartesianCoordinate implements Coordinate {
 
 	public CartesianCoordinate(double x, double y, double z) {
 		super();
+		
+		if (!Double.isFinite(x) || !Double.isFinite(y) || !Double.isFinite(z))
+			throw new IllegalArgumentException("Coordinates must be finite");
+		
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -86,10 +90,23 @@ public class CartesianCoordinate implements Coordinate {
 		return isEqual(other);
 	}
 	
+	/**
+	 * Compares the to floating point numbers a and b for quasi-equality.
+	 * 
+	 * @param a the first value to be compared
+	 * @param b the second value to be compared
+	 * @return <code>true</code> if the two values are quasi-equal.
+	 */
+	protected boolean cmp(double a, double b) {
+		return (Math.abs(a) < εZ & Math.abs(b) < εZ) //
+				| (Math.abs(a-b) < Math.abs(a+b)*εS);
+	}
+	
 	public boolean isEqual(CartesianCoordinate other) {
 		if (other == null)
 			return false;
-		return (x == other.x && y == other.y && z == other.z);
+		
+		return (cmp(x, other.x) & cmp(y, other.y) & cmp(z, other.z));
 	}
 
 	/**
@@ -127,8 +144,7 @@ public class CartesianCoordinate implements Coordinate {
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
-		// TODO implement
-		return null;
+		return SphericCoordinate.fromCartesian(this);
 	}
 
 	@Override
@@ -139,12 +155,32 @@ public class CartesianCoordinate implements Coordinate {
 
 	@Override
 	public double getCentralAngle(Coordinate other) {
-		// TODO implement
-		return 0;
+		CartesianCoordinate cc = other.asCartesianCoordinate();
+		
+		// the central angle between a and b is equal to
+		//   arctan(|a corss b| / (a dot b))
+		
+		// cross product
+		double cpx = this.y * cc.z - this.z * cc.y;
+		double cpy = this.z * cc.x - this.x * cc.z;
+		double cpz = this.x * cc.y - this.y * cc.x;
+		double cpd = Math.sqrt(cpx*cpx + cpy*cpy + cpz*cpz);
+		
+		// dot product
+		double dpx = this.x * cc.x;
+		double dpy = this.y * cc.y;
+		double dpz = this.z * cc.z;
+		double dpd = dpx + dpy + dpz;
+		
+		// final result
+		return Math.atan(cpd / dpd);
 	}
 
 	@Override
 	public boolean isEqual(Coordinate other) {
+		if (other == null)
+			return false;
+		
 		CartesianCoordinate ccOther = other.asCartesianCoordinate();
 		return isEqual(ccOther);
 	}

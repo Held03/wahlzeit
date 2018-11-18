@@ -35,9 +35,6 @@ public class CoordinateTest {
 	private static final CartesianCoordinate ONE = new CartesianCoordinate(1.0, 1.0, 1.0);
 	private static final CartesianCoordinate MINUS_ONE = new CartesianCoordinate(-1.0, -1.0, -1.0);
 	private static final CartesianCoordinate MINUS_ZERO = new CartesianCoordinate(-0.0, -0.0, -0.0);
-	private static final CartesianCoordinate INF = new CartesianCoordinate(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-	private static final CartesianCoordinate MINUS_INF = new CartesianCoordinate(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
-	private static final CartesianCoordinate NAN = new CartesianCoordinate(Double.NaN, Double.NaN, Double.NaN);
 	
 	private static Random rng;
 	
@@ -93,6 +90,32 @@ public class CoordinateTest {
 			assert(z == c.z);
 		});
 	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorInfX() {
+		new CartesianCoordinate(Double.POSITIVE_INFINITY, 0, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorInfY() {
+		new CartesianCoordinate(0, Double.POSITIVE_INFINITY, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorInfZ() {
+		new CartesianCoordinate(0, 0, Double.POSITIVE_INFINITY);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorNaNX() {
+		new CartesianCoordinate(Double.NaN, 0, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorNaNY() {
+		new CartesianCoordinate(0, Double.NaN, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorNaNZ() {
+		new CartesianCoordinate(0, 0, Double.NaN);
+	}
 
 	@Test
 	public void testEqualityIdentity() {
@@ -104,11 +127,6 @@ public class CoordinateTest {
 		assertEquals(ONE, ONE);
 		assertEquals(MINUS_ONE, MINUS_ONE);
 		assertEquals(MINUS_ZERO, MINUS_ZERO);
-		assertEquals(INF, INF);
-		assertEquals(MINUS_INF, MINUS_INF);
-
-		assertEquals(NAN.hashCode(), NAN.hashCode());
-		assertEquals(NAN, NAN);
 	}
 
 	@Test
@@ -129,10 +147,6 @@ public class CoordinateTest {
 		assertEquals(ONE, copyCoordinate(ONE));
 		assertEquals(MINUS_ONE, copyCoordinate(MINUS_ONE));
 		assertEquals(MINUS_ZERO, copyCoordinate(MINUS_ZERO));
-		assertEquals(INF, copyCoordinate(INF));
-		assertEquals(MINUS_INF, copyCoordinate(MINUS_INF));
-		
-		assertEquals(NAN.hashCode(), copyCoordinate(NAN).hashCode());
 	}
 	
 	@Test
@@ -171,10 +185,6 @@ public class CoordinateTest {
 		
 		assertNotEquals(ONE, MINUS_ONE);
 		assertNotEquals(MINUS_ONE, ONE);
-		assertNotEquals(INF, MINUS_INF);
-		assertNotEquals(MINUS_INF, INF);
-		
-		assertNotEquals(NAN, copyCoordinate(NAN));
 	}
 
 	@Test
@@ -208,8 +218,6 @@ public class CoordinateTest {
 		assertTrue(MINUS_ONE.getDistance(MINUS_ONE) == 0.0);
 		assertTrue(CartesianCoordinate.ORIGIN.getDistance(MINUS_ZERO) == 0.0);
 		assertTrue(MINUS_ZERO.getDistance(MINUS_ZERO) == 0.0);
-
-		assertTrue(Double.isNaN(NAN.getDistance(NAN)));
 	}
 	
 	@Test
