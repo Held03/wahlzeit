@@ -66,7 +66,7 @@ public class CoordinateTest {
 	/**
 	 * Double significant precision
 	 */
-	private static final double ε = 1e-15;
+	private static final double ε = 1e-10;
 	private static final double SqrtOf2 = Math.sqrt(2.0);
 	private static final double SqrtOf3 = Math.sqrt(3.0);
 	private static final double SqrtOf6 = Math.sqrt(6.0);
@@ -103,7 +103,7 @@ public class CoordinateTest {
 	}
 	
 	protected void assertDoubleEq(double d1, double d2) {
-		assert(Math.abs(d1-d2) <= ε * Math.abs(d1+d2));
+		assertTrue(Math.abs(d1-d2) <= ε * Math.abs(d1+d2) || Math.abs(d1-d2) <= ε);
 	}
 	
 	protected Coordinate newRandomCoordinate() {
@@ -258,7 +258,6 @@ public class CoordinateTest {
 		Coordinate c = converter.convert(CartesianCoordinate.ORIGIN);
 		assertTrue(c.isEqual(converter.convertCopy(c)));
 		c = converter.convert(CartesianCoordinate.UNIT_X);
-		System.out.println(c + " " + converter.convertCopy(c) + " " + converter.convertCopy(converter.convertCopy(c)));
 		assertTrue(c.isEqual(converter.convertCopy(c)));
 		c = converter.convert(CartesianCoordinate.UNIT_Y);
 		assertTrue(c.isEqual(converter.convertCopy(c)));
@@ -356,36 +355,81 @@ public class CoordinateTest {
 	
 	@Test
 	public void testOneDistance() {
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.ORIGIN), 1.0);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.ORIGIN), 1.0);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.ORIGIN), 1.0);
-
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(MINUS_ZERO), 1.0);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(MINUS_ZERO), 1.0);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(MINUS_ZERO), 1.0);
+		Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		Coordinate c2 = converter.convert(CartesianCoordinate.ORIGIN);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(CartesianCoordinate.ORIGIN);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(CartesianCoordinate.ORIGIN);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		
+		c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		c2 = converter.convert(MINUS_ZERO);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(MINUS_ZERO);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(MINUS_ZERO);
+		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
 	}
 	
 	@Test
 	public void testSomeDistance() {
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.UNIT_Z), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.UNIT_X), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.UNIT_Y), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(CartesianCoordinate.UNIT_Y), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(CartesianCoordinate.UNIT_Z), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(CartesianCoordinate.UNIT_X), SqrtOf2);
+		Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		Coordinate c2 = converter.convert(CartesianCoordinate.UNIT_Z);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(CartesianCoordinate.UNIT_X);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(CartesianCoordinate.UNIT_Y);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		
+		c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		c2 = converter.convert(CartesianCoordinate.UNIT_Y);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(CartesianCoordinate.UNIT_Z);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(CartesianCoordinate.UNIT_X);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		
+		c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		c2 = converter.convert(ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
 
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(ONE), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(ONE), SqrtOf2);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(ONE), SqrtOf2);
+		c1 = converter.convert(CartesianCoordinate.ORIGIN);
+		c2 = converter.convert(ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+		c1 = converter.convert(CartesianCoordinate.ORIGIN);
+		c2 = converter.convert(MINUS_ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+		c1 = converter.convert(MINUS_ZERO);
+		c2 = converter.convert(ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+		c1 = converter.convert(MINUS_ZERO);
+		c2 = converter.convert(MINUS_ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
 
-		assertDoubleEq(CartesianCoordinate.ORIGIN.getDistance(ONE), SqrtOf3);
-		assertDoubleEq(CartesianCoordinate.ORIGIN.getDistance(MINUS_ONE), SqrtOf3);
-		assertDoubleEq(MINUS_ZERO.getDistance(ONE), SqrtOf3);
-		assertDoubleEq(MINUS_ZERO.getDistance(MINUS_ONE), SqrtOf3);
-
-		assertDoubleEq(CartesianCoordinate.UNIT_X.getDistance(MINUS_ONE), SqrtOf6);
-		assertDoubleEq(CartesianCoordinate.UNIT_Y.getDistance(MINUS_ONE), SqrtOf6);
-		assertDoubleEq(CartesianCoordinate.UNIT_Z.getDistance(MINUS_ONE), SqrtOf6);
+		c1 = converter.convert(CartesianCoordinate.UNIT_X);
+		c2 = converter.convert(MINUS_ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+		c2 = converter.convert(MINUS_ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+		c2 = converter.convert(MINUS_ONE);
+		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
 	}
 	
 	@Test
@@ -403,5 +447,23 @@ public class CoordinateTest {
 			assertDoubleEq(c1.getCartesianDistance(c2), c2.getCartesianDistance(c1));
 		});
 	}
+
+	
+	@Test
+	public void testAngleRandom() {
+		runMultibletimes(() -> {
+			Coordinate c1 = newRandomCoordinate();
+			Coordinate c2 = newRandomCoordinate();
+			
+			Coordinate cc1 = converter.convertBack(c1);
+			Coordinate cc2 = converter.convertBack(c2);
+
+			assertDoubleEq(c1.getCentralAngle(c2), c2.getCentralAngle(c1));
+			assertDoubleEq(c1.getCentralAngle(cc2), cc2.getCentralAngle(c1));
+			assertDoubleEq(cc1.getCentralAngle(c2), c2.getCentralAngle(cc1));
+			assertDoubleEq(c1.getCentralAngle(cc2), c2.getCentralAngle(cc1));
+		});
+	}
+	
 
 }

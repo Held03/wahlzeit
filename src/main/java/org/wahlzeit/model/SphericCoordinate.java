@@ -141,8 +141,8 @@ public class SphericCoordinate implements Coordinate {
 		
 		SphericCoordinate sc = other.asSphericCoordinate();
 		
-		double d = Math.sin(theta) * Math.sin(sc.theta) //
-				+ Math.cos(theta) * Math.cos(sc.theta) * Math.cos(phi - sc.phi);
+		double d = Math.cos(theta) * Math.cos(sc.theta) //
+				+ Math.sin(theta) * Math.sin(sc.theta) * Math.cos(phi - sc.phi);
 		
 		return Math.acos(d);
 	}
