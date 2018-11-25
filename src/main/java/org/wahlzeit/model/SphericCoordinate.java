@@ -131,7 +131,18 @@ public class SphericCoordinate implements Coordinate {
 		if (other == null)
 			throw new IllegalArgumentException("Other coordinate must not be null");
 		
-		return other.getCartesianDistance(asCartesianCoordinate());
+		SphericCoordinate sc = other.asSphericCoordinate();
+		
+		// Distance between (r,θ,ϕ) and (r´,θ´,φ´):
+		//   sqrt(r^2+r′^2−2rr′[sin(θ)sin(θ′)cos(ϕ−ϕ′)+cos(θ)cos(θ′)])
+		
+		double a = Math.sin(theta) * Math.sin(sc.theta) * Math.cos(phi - sc.phi)
+				+ Math.cos(theta) * Math.cos(sc.theta);
+		 
+		double ds = Math.pow(radius, 2) + Math.pow(sc.radius, 2)
+			- 2 * radius * sc.radius * a;
+		
+		return Math.sqrt(ds);
 	}
 
 	@Override
