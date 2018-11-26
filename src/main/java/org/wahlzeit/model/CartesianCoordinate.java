@@ -12,7 +12,7 @@ package org.wahlzeit.model;
 /**
  * A coordinate is an immutable mathematical Cartesian point.
  */
-public class CartesianCoordinate implements Coordinate {
+public class CartesianCoordinate extends AbstractCoordinate {
 
 	/*
 	 * 

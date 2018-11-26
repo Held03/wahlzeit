@@ -24,7 +24,7 @@ package org.wahlzeit.model;
  * <code>OP</code>, and <code>φ</code> is the angle between the azimuth
  * direction and the projection of the line <code>OP</code> into the reference plane.
  */
-public class SphericCoordinate implements Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
 	public static final SphericCoordinate ORIGIN = new SphericCoordinate(0.0, 0.0, 0.0);
 	public static final SphericCoordinate ZENITH = new SphericCoordinate(1.0, 0.0, 0.0);
 	public static final SphericCoordinate AZIMUTH = new SphericCoordinate(1.0, Math.PI, 0.0);
