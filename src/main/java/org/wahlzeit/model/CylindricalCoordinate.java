@@ -76,7 +76,7 @@ public class CylindricalCoordinate extends AbstractCoordinate {
 	}
 	
 	public static CylindricalCoordinate formCartesian(CartesianCoordinate cc) {
-		double ρ = Math.sqrt(cc.getX());
+		double ρ = Math.sqrt(cc.getX()*cc.getX() + cc.getY()*cc.getY());
 		double φ = Math.atan2(cc.getY(), cc.getX());
 		double z = cc.getZ();
 		
@@ -89,7 +89,7 @@ public class CylindricalCoordinate extends AbstractCoordinate {
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
 		double r = Math.sqrt(radius*radius + height*height);
-		double θ = Math.atan2(radius, height);
+		double θ = Math.atan(radius / height);
 		double φ = phi;
 		
 		return new SphericCoordinate(r, θ, φ);

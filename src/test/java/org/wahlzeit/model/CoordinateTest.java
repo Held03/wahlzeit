@@ -52,12 +52,31 @@ class SphericalConverter implements Converter {
 	}
 }
 
+class CylindricalConverter implements Converter {
+	public Coordinate convert(Coordinate c) {
+		if (c instanceof CylindricalCoordinate) {
+			return (CylindricalCoordinate) c;
+		}
+		if (c instanceof CartesianCoordinate) {
+			return CylindricalCoordinate.formCartesian((CartesianCoordinate) c);
+		}
+		if (c instanceof SphericCoordinate) {
+			return CylindricalCoordinate.fromSpheric((SphericCoordinate) c);
+		}
+		// Unknown coordinate type
+		return c;
+	}
+	public Coordinate convertBack(Coordinate c) {
+		return c.asCartesianCoordinate();
+	}
+}
+
 @RunWith(Parameterized.class)
 public class CoordinateTest {
 	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {     
-                 { new CartesianConverter() }, { new SphericalConverter() }  
+                 { new CartesianConverter() }, { new SphericalConverter() } , {new CylindricalConverter()}
            });
     }
 	
