@@ -214,4 +214,25 @@ public class SphericCoordinate extends AbstractCoordinate {
 		return String.format("(%.15f, %.15f, %.15f)", radius, theta, phi);
 	}
 
+	/**
+	 * @return the radius
+	 */
+	public double getRadius() {
+		return radius;
+	}
+
+	/**
+	 * @return the theta
+	 */
+	public double getTheta() {
+		return theta;
+	}
+
+	/**
+	 * @return the phi
+	 */
+	public double getPhi() {
+		return phi;
+	}
+
 }

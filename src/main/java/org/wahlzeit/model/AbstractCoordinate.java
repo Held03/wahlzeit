@@ -10,7 +10,8 @@
 package org.wahlzeit.model;
 
 /**
- * 
+ * Represents an abstract coordinate which provides some forwarding default
+ * implementations.
  */
 public abstract class AbstractCoordinate implements Coordinate {
 
