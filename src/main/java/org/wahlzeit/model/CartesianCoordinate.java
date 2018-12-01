@@ -90,18 +90,6 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		return isEqual(other);
 	}
 	
-	/**
-	 * Compares the to floating point numbers a and b for quasi-equality.
-	 * 
-	 * @param a the first value to be compared
-	 * @param b the second value to be compared
-	 * @return <code>true</code> if the two values are quasi-equal.
-	 */
-	protected boolean cmp(double a, double b) {
-		return (Math.abs(a) < εZ & Math.abs(b) < εZ) //
-				| (Math.abs(a-b) <= εS);
-	}
-	
 	public boolean isEqual(CartesianCoordinate other) {
 		if (other == null)
 			return false;

@@ -51,6 +51,16 @@ public class SphericCoordinate extends AbstractCoordinate {
 		// just a dummy
 	}
 	
+	protected void assertClassInvariants() {
+		if (!(0 <= theta && theta < Math.PI)) {
+			throw new IllegalStateException("Theta is out of range");
+		}
+		
+		if (!(0 <= phi && phi < 2*Math.PI)) {
+			throw new IllegalStateException("Phi is out of range");
+		}
+	}
+	
 	/**
 	 * Creates a new spherical coordinate with given parameters.
 	 * 
@@ -79,6 +89,8 @@ public class SphericCoordinate extends AbstractCoordinate {
 		this.radius = radius;
 		this.theta = theta;
 		this.phi = phi;
+		
+		assertClassInvariants();
 	}
 	
 	/**
@@ -114,6 +126,8 @@ public class SphericCoordinate extends AbstractCoordinate {
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
+		assertClassInvariants();
+		
 		double x = radius * Math.sin(theta) * Math.cos(phi);
 		double y = radius * Math.sin(theta) * Math.sin(phi);
 		double z = radius * Math.cos(theta);
@@ -133,6 +147,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 		
 		SphericCoordinate sc = other.asSphericCoordinate();
 		
+		assertClassInvariants();
+		sc.assertClassInvariants();
+		
 		// Distance between (r,θ,ϕ) and (r´,θ´,φ´):
 		//   sqrt(r^2+r′^2−2rr′[sin(θ)sin(θ′)cos(ϕ−ϕ′)+cos(θ)cos(θ′)])
 		
@@ -151,28 +168,14 @@ public class SphericCoordinate extends AbstractCoordinate {
 			throw new IllegalArgumentException("Other coordinate must not be null");
 		
 		SphericCoordinate sc = other.asSphericCoordinate();
+
+		assertClassInvariants();
+		sc.assertClassInvariants();
 		
 		double d = Math.cos(theta) * Math.cos(sc.theta) //
 				+ Math.sin(theta) * Math.sin(sc.theta) * Math.cos(phi - sc.phi);
 		
 		return Math.acos(d);
-	}
-	
-	/**
-	 * Compares the to floating point numbers a and b for quasi-equality.
-	 * 
-	 * @param a the first value to be compared
-	 * @param b the second value to be compared
-	 * @return <code>true</code> if the two values are quasi-equal.
-	 */
-	protected boolean cmp(double a, double b) {
-		if (Math.abs(a) < εZ & Math.abs(b) < εZ) {
-			return true;
-		} else if (Math.abs(a-b) <= εS) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	@Override
@@ -185,6 +188,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	public boolean isEqual(SphericCoordinate o) {
 		if (o == null)
 			return false;
+		
+		assertClassInvariants();
+		o.assertClassInvariants();
 		
 		// Comparing the radius
 		if (!cmp(radius, o.radius)) {

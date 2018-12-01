@@ -51,4 +51,21 @@ public abstract class AbstractCoordinate implements Coordinate {
 		return getCartesianDistance(other) < εZ;
 	}
 
+	
+	/**
+	 * Compares the to floating point numbers a and b for quasi-equality.
+	 * 
+	 * @param a the first value to be compared
+	 * @param b the second value to be compared
+	 * @return <code>true</code> if the two values are quasi-equal.
+	 */
+	protected static boolean cmp(double a, double b) {
+		if (Math.abs(a) < εZ & Math.abs(b) < εZ) {
+			return true;
+		} else if (Math.abs(a-b) <= εS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
