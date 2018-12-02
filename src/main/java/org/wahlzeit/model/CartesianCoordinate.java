@@ -11,6 +11,11 @@ package org.wahlzeit.model;
 
 /**
  * A coordinate is an immutable mathematical Cartesian point.
+ * <p>
+ * <b>Contract:</b>
+ * <code>x</code> must be a finite double value.
+ * <code>y</code> must be a finite double value.
+ * <code>z</code> must be a finite double value.
  */
 public class CartesianCoordinate extends AbstractCoordinate {
 
@@ -29,7 +34,10 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	protected double y;
 	protected double z;
 
-	
+
+	/**
+	 * Asserts the validity of the class contract.
+	 */
 	protected void assertClassInvariants() {
 		assertValidDouble(x);
 		assertValidDouble(y);

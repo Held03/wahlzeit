@@ -23,6 +23,11 @@ package org.wahlzeit.model;
  * <code>O</code>, <code>θ</code> is the angle between the zenith and the line
  * <code>OP</code>, and <code>φ</code> is the angle between the azimuth
  * direction and the projection of the line <code>OP</code> into the reference plane.
+ * <p>
+ * <b>Contract:</b>
+ * <code>radius</code> must be a positive finite double value.
+ * <code>theta</code> must be a finite double value in the range 0 to π.
+ * <code>phi</code> must be a finite double value in the range 0 to 2π.
  */
 public class SphericCoordinate extends AbstractCoordinate {
 	public static final SphericCoordinate ORIGIN = new SphericCoordinate(0.0, 0.0, 0.0);
@@ -67,6 +72,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 		}
 	}
 	
+	/**
+	 * Asserts the validity of the class contract.
+	 */
 	protected void assertClassInvariants() {
 		assertValidRadius();
 		assertValidTheta();
