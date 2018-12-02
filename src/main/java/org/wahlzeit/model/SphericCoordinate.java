@@ -47,18 +47,30 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 */
 	double phi;
 	
-	private SphericCoordinate() {
-		// just a dummy
+	protected void assertValidRadius() {
+		assertValidDouble(radius);
+		if (radius < 0)
+			throw new IllegalStateException("Radius must be positive");
+	}
+	
+	protected void assertValidTheta() {
+		assertValidDouble(theta);
+		if (!(0 <= theta && theta < Math.PI)) {
+			throw new IllegalStateException("Theta must between 0 and π");
+		}
+	}
+	
+	protected void assertValidPhi() {
+		assertValidDouble(phi);
+		if (!(0 <= phi && phi < 2*Math.PI)) {
+			throw new IllegalStateException("Phi must between 0 and 2π");
+		}
 	}
 	
 	protected void assertClassInvariants() {
-		if (!(0 <= theta && theta < Math.PI)) {
-			throw new IllegalStateException("Theta is out of range");
-		}
-		
-		if (!(0 <= phi && phi < 2*Math.PI)) {
-			throw new IllegalStateException("Phi is out of range");
-		}
+		assertValidRadius();
+		assertValidTheta();
+		assertValidPhi();
 	}
 	
 	/**
@@ -107,11 +119,11 @@ public class SphericCoordinate extends AbstractCoordinate {
 	}
 
 	/**
-	 * Get a new spherical coordinate for a cartesian coordinate.
+	 * Get a new spherical coordinate for a Cartesian coordinate.
 	 * 
-	 * @param x the x coordinate of the cartesian coordinate
-	 * @param y the y coordinate of the cartesian coordinate
-	 * @param z the z coordinate of the cartesian coordinate
+	 * @param x the x coordinate of the Cartesian coordinate
+	 * @param y the y coordinate of the Cartesian coordinate
+	 * @param z the z coordinate of the Cartesian coordinate
 	 * @return a new equivalent spherical coordinate
 	 */
 	public static SphericCoordinate fromCartesian(double x, double y, double z) {

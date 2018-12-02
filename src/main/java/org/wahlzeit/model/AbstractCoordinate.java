@@ -68,4 +68,11 @@ public abstract class AbstractCoordinate implements Coordinate {
 			return false;
 		}
 	}
+	
+	protected static void assertValidDouble(double f) {
+		if (!Double.isFinite(f)) {
+			throw new IllegalStateException("Double must be finite, got "+f);
+		}
+	}
 }
+

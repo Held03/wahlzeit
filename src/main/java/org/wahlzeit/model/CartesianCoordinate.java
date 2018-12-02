@@ -29,8 +29,11 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	protected double y;
 	protected double z;
 
-	private CartesianCoordinate() {
-		// do nothing, necessary for Objectify to load it
+	
+	protected void assertClassInvariants() {
+		assertValidDouble(x);
+		assertValidDouble(y);
+		assertValidDouble(z);
 	}
 
 	public CartesianCoordinate(double x, double y, double z) {
@@ -42,6 +45,8 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		assertClassInvariants();
 	}
 	
 	/**
@@ -54,6 +59,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		if (other == null) {
 			throw new IllegalArgumentException("Other coordinate must not be null");
 		}
+		
+		assertClassInvariants();
+		other.assertClassInvariants();
 		
 		double dx = this.x - other.x;
 		double dy = this.y - other.y;
@@ -93,6 +101,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	public boolean isEqual(CartesianCoordinate other) {
 		if (other == null)
 			return false;
+		
+		assertClassInvariants();
+		other.assertClassInvariants();
 
 		return (cmp(x, other.x) & cmp(y, other.y) & cmp(z, other.z));
 	}
@@ -150,6 +161,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 			throw new IllegalArgumentException("Other coordinate must not be null");
 		
 		CartesianCoordinate cc = other.asCartesianCoordinate();
+		
+		assertClassInvariants();
+		cc.assertClassInvariants();
 		
 		// the central angle between a and b is equal to
 		//   arctan(|a corss b| / (a dot b))
