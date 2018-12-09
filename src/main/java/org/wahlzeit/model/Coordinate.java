@@ -20,7 +20,7 @@ public interface Coordinate {
 	 * }
 	 * </pre>
 	 */
-	static double εS = 1e-10;
+	static double εS = 1e-9;
 	
 	/**
 	 * Comparison epsilon for zero.
@@ -32,7 +32,7 @@ public interface Coordinate {
 	 * }
 	 * </pre>
 	 */
-	static double εZ = 1e-14;
+	static double εZ = 1e-12;
 	
 	/**
 	 * Convert this coordinate into a Cartesian coordinate.
