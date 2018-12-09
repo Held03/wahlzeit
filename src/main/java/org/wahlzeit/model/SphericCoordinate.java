@@ -89,10 +89,12 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @param phi the angle to the azimuth
 	 */
 	public SphericCoordinate(double radius, double theta, double phi) {
-		if (radius < 0)
-			throw new IllegalArgumentException("Radius must be positive");
-		if (!Double.isFinite(radius) || !Double.isFinite(theta) || !Double.isFinite(phi))
-			throw new IllegalArgumentException("Coordinates must be finite");
+		// Ensures pre-conditions
+		assertValidDouble(radius);
+		assertPositiveDouble(radius);
+		assertValidDouble(theta);
+		assertValidDouble(phi);
+		
 		
 		theta = theta % Math.PI;
 		if (theta < 0) {
@@ -110,18 +112,20 @@ public class SphericCoordinate extends AbstractCoordinate {
 		this.theta = theta;
 		this.phi = phi;
 		
+		
+		// Ensures post-conditions
 		assertClassInvariants();
 	}
 	
 	/**
-	 * Get a new spherical coordinate for a cartesian coordinate.
+	 * Get a new spherical coordinate for a Cartesian coordinate.
 	 * 
-	 * @param cc the cartesian coordinate
+	 * @param cc the Cartesian coordinate
 	 * @return a new equivalent spherical coordinate
 	 */
 	public static SphericCoordinate fromCartesian(CartesianCoordinate cc) {
-		if (cc == null)
-			throw new IllegalArgumentException("Coordinate must not be null");
+		// Ensure pre-condition
+		assertValidCoordinate(cc);
 		
 		return fromCartesian(cc.getX(), cc.getY(), cc.getZ());
 	}
@@ -146,6 +150,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
+		// Ensures class invariants
 		assertClassInvariants();
 		
 		double x = radius * Math.sin(theta) * Math.cos(phi);
@@ -161,14 +166,14 @@ public class SphericCoordinate extends AbstractCoordinate {
 	}
 
 	@Override
-	public double getCartesianDistance(Coordinate other) {
-		if (other == null)
-			throw new IllegalArgumentException("Other coordinate must not be null");
-		
+	public double getCartesianDistance(Coordinate other) throws InvalidResultException {
+		// Ensures pre-condition
+		assertValidCoordinate(other);
 		SphericCoordinate sc = other.asSphericCoordinate();
-		
-		assertClassInvariants();
 		sc.assertClassInvariants();
+		
+		// Ensures class invariants
+		assertClassInvariants();
 		
 		// Distance between (r,θ,ϕ) and (r´,θ´,φ´):
 		//   sqrt(r^2+r′^2−2rr′[sin(θ)sin(θ′)cos(ϕ−ϕ′)+cos(θ)cos(θ′)])
@@ -179,23 +184,33 @@ public class SphericCoordinate extends AbstractCoordinate {
 		double ds = Math.pow(radius, 2) + Math.pow(sc.radius, 2)
 			- 2 * radius * sc.radius * a;
 		
-		return Math.sqrt(ds);
+		double result = Math.sqrt(ds);
+		
+		// Ensure post-condition
+		assertValidDoubleResult(result);
+		
+		return result;
 	}
 
 	@Override
-	public double getCentralAngle(Coordinate other) {
-		if (other == null)
-			throw new IllegalArgumentException("Other coordinate must not be null");
-		
+	public double getCentralAngle(Coordinate other) throws InvalidResultException {
+		// Ensures pre-condition
+		assertValidCoordinate(other);
 		SphericCoordinate sc = other.asSphericCoordinate();
-
-		assertClassInvariants();
 		sc.assertClassInvariants();
+		
+		// Ensures class invariants
+		assertClassInvariants();
 		
 		double d = Math.cos(theta) * Math.cos(sc.theta) //
 				+ Math.sin(theta) * Math.sin(sc.theta) * Math.cos(phi - sc.phi);
 		
-		return Math.acos(d);
+		double result = Math.acos(d);
+		
+		// Ensure post-condition
+		assertValidDoubleResult(result);
+		
+		return result;
 	}
 
 	@Override
@@ -206,11 +221,11 @@ public class SphericCoordinate extends AbstractCoordinate {
 	}
 
 	public boolean isEqual(SphericCoordinate o) {
+		// Ensure class invariant
+		assertClassInvariants();
+		
 		if (o == null)
 			return false;
-		
-		assertClassInvariants();
-		o.assertClassInvariants();
 		
 		// Comparing the radius
 		if (!cmp(radius, o.radius)) {
@@ -244,6 +259,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return the radius
 	 */
 	public double getRadius() {
+		// Ensure class invariant
+		assertClassInvariants();
+		
 		return radius;
 	}
 
@@ -251,6 +269,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return the theta
 	 */
 	public double getTheta() {
+		// Ensure class invariant
+		assertClassInvariants();
+		
 		return theta;
 	}
 
@@ -258,6 +279,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return the phi
 	 */
 	public double getPhi() {
+		// Ensure class invariant
+		assertClassInvariants();
+		
 		return phi;
 	}
 

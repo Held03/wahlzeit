@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -177,54 +178,54 @@ public class CoordinateTest {
 		});
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorInfX() {
 		new CartesianCoordinate(Double.POSITIVE_INFINITY, 0, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorInfY() {
 		new CartesianCoordinate(0, Double.POSITIVE_INFINITY, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorInfZ() {
 		new CartesianCoordinate(0, 0, Double.POSITIVE_INFINITY);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorNaNX() {
 		new CartesianCoordinate(Double.NaN, 0, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorNaNY() {
 		new CartesianCoordinate(0, Double.NaN, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testCartesianConstructorNaNZ() {
 		new CartesianCoordinate(0, 0, Double.NaN);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorInfR() {
 		new SphericCoordinate(Double.POSITIVE_INFINITY, 0, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorInfT() {
 		new SphericCoordinate(0, Double.POSITIVE_INFINITY, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorInfP() {
 		new SphericCoordinate(0, 0, Double.POSITIVE_INFINITY);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorNaNR() {
 		new SphericCoordinate(Double.NaN, 0, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorNaNT() {
 		new SphericCoordinate(0, Double.NaN, 0);
 	}
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSphericConstructorNaNP() {
 		new SphericCoordinate(0, 0, Double.NaN);
 	}
@@ -345,125 +346,145 @@ public class CoordinateTest {
 		assertNotEquals(MINUS_ONE, ONE);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testNullDistance() {
-		converter.convert(CartesianCoordinate.ORIGIN).getCartesianDistance(null);
+		try {
+			converter.convert(CartesianCoordinate.ORIGIN).getCartesianDistance(null);
+		} catch (InvalidResultException e) {
+			fail(e.toString());
+		}
 	}
 	
 	@Test
 	public void testZeroDistance() {
-		Coordinate c = converter.convert(CartesianCoordinate.ORIGIN);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-		c = converter.convert(CartesianCoordinate.UNIT_X);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-		c = converter.convert(CartesianCoordinate.UNIT_Y);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-		c = converter.convert(CartesianCoordinate.UNIT_Z);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-
-		c = converter.convert(ONE);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-		c = converter.convert(MINUS_ONE);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
-		c = converter.convert(CartesianCoordinate.ORIGIN);
-		Coordinate c2 = converter.convert(MINUS_ZERO);
-		assertTrue(c.getCartesianDistance(c2) == 0.0);
-		c = converter.convert(MINUS_ZERO);
-		assertTrue(c.getCartesianDistance(c) == 0.0);
+		try {
+			Coordinate c = converter.convert(CartesianCoordinate.ORIGIN);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+			c = converter.convert(CartesianCoordinate.UNIT_X);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+			c = converter.convert(CartesianCoordinate.UNIT_Y);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+			c = converter.convert(CartesianCoordinate.UNIT_Z);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+	
+			c = converter.convert(ONE);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+			c = converter.convert(MINUS_ONE);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+			c = converter.convert(CartesianCoordinate.ORIGIN);
+			Coordinate c2 = converter.convert(MINUS_ZERO);
+			assertTrue(c.getCartesianDistance(c2) == 0.0);
+			c = converter.convert(MINUS_ZERO);
+			assertTrue(c.getCartesianDistance(c) == 0.0);
+		} catch (InvalidResultException e) {
+			fail(e.toString());
+		}
 	}
 	
 	@Test
 	public void testOneDistance() {
-		Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		Coordinate c2 = converter.convert(CartesianCoordinate.ORIGIN);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(CartesianCoordinate.ORIGIN);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(CartesianCoordinate.ORIGIN);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
-		
-		c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		c2 = converter.convert(MINUS_ZERO);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(MINUS_ZERO);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(MINUS_ZERO);
-		assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		try {
+			Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			Coordinate c2 = converter.convert(CartesianCoordinate.ORIGIN);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(CartesianCoordinate.ORIGIN);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(CartesianCoordinate.ORIGIN);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+			
+			c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			c2 = converter.convert(MINUS_ZERO);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(MINUS_ZERO);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(MINUS_ZERO);
+			assertDoubleEq(c1.getCartesianDistance(c2), 1.0);
+		} catch (InvalidResultException e) {
+			fail(e.toString());
+		}
 	}
 	
 	@Test
 	public void testSomeDistance() {
-		Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		Coordinate c2 = converter.convert(CartesianCoordinate.UNIT_Z);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(CartesianCoordinate.UNIT_X);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(CartesianCoordinate.UNIT_Y);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		
-		c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		c2 = converter.convert(CartesianCoordinate.UNIT_Y);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(CartesianCoordinate.UNIT_Z);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(CartesianCoordinate.UNIT_X);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		
-		c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		c2 = converter.convert(ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
-
-		c1 = converter.convert(CartesianCoordinate.ORIGIN);
-		c2 = converter.convert(ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
-		c1 = converter.convert(CartesianCoordinate.ORIGIN);
-		c2 = converter.convert(MINUS_ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
-		c1 = converter.convert(MINUS_ZERO);
-		c2 = converter.convert(ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
-		c1 = converter.convert(MINUS_ZERO);
-		c2 = converter.convert(MINUS_ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
-
-		c1 = converter.convert(CartesianCoordinate.UNIT_X);
-		c2 = converter.convert(MINUS_ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Y);
-		c2 = converter.convert(MINUS_ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
-		c1 = converter.convert(CartesianCoordinate.UNIT_Z);
-		c2 = converter.convert(MINUS_ONE);
-		assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+		try {
+			Coordinate c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			Coordinate c2 = converter.convert(CartesianCoordinate.UNIT_Z);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(CartesianCoordinate.UNIT_X);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(CartesianCoordinate.UNIT_Y);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			
+			c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			c2 = converter.convert(CartesianCoordinate.UNIT_Y);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(CartesianCoordinate.UNIT_Z);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(CartesianCoordinate.UNIT_X);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			
+			c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			c2 = converter.convert(ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf2);
+	
+			c1 = converter.convert(CartesianCoordinate.ORIGIN);
+			c2 = converter.convert(ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+			c1 = converter.convert(CartesianCoordinate.ORIGIN);
+			c2 = converter.convert(MINUS_ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+			c1 = converter.convert(MINUS_ZERO);
+			c2 = converter.convert(ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+			c1 = converter.convert(MINUS_ZERO);
+			c2 = converter.convert(MINUS_ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf3);
+	
+			c1 = converter.convert(CartesianCoordinate.UNIT_X);
+			c2 = converter.convert(MINUS_ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Y);
+			c2 = converter.convert(MINUS_ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+			c1 = converter.convert(CartesianCoordinate.UNIT_Z);
+			c2 = converter.convert(MINUS_ONE);
+			assertDoubleEq(c1.getCartesianDistance(c2), SqrtOf6);
+		} catch (InvalidResultException e) {
+			fail(e.toString());
+		}
 	}
 	
 	@Test
 	public void testDistanceRandom() {
 		runMultibletimes(() -> {
-			Coordinate c1 = newRandomCoordinate();
-			Coordinate c2 = newRandomCoordinate();
-			
-			CartesianCoordinate cc1 = c1.asCartesianCoordinate();
-			CartesianCoordinate cc2 = c2.asCartesianCoordinate();
-			double dist = euclidDistance(cc1.x, cc2.x, cc1.y, cc2.y, cc1.z, cc2.z);
-
-			assertDoubleEq(c1.getCartesianDistance(c2), dist);
-			assertDoubleEq(c2.getCartesianDistance(c1), dist);
-			assertDoubleEq(c1.getCartesianDistance(c2), c2.getCartesianDistance(c1));
+			try {
+				Coordinate c1 = newRandomCoordinate();
+				Coordinate c2 = newRandomCoordinate();
+				
+				CartesianCoordinate cc1 = c1.asCartesianCoordinate();
+				CartesianCoordinate cc2 = c2.asCartesianCoordinate();
+				double dist = euclidDistance(cc1.x, cc2.x, cc1.y, cc2.y, cc1.z, cc2.z);
+	
+				assertDoubleEq(c1.getCartesianDistance(c2), dist);
+				assertDoubleEq(c2.getCartesianDistance(c1), dist);
+				assertDoubleEq(c1.getCartesianDistance(c2), c2.getCartesianDistance(c1));
+			} catch (InvalidResultException e) {
+				fail(e.toString());
+			}
 		});
 	}
 
@@ -471,16 +492,20 @@ public class CoordinateTest {
 	@Test
 	public void testAngleRandom() {
 		runMultibletimes(() -> {
-			Coordinate c1 = newRandomCoordinate();
-			Coordinate c2 = newRandomCoordinate();
-			
-			Coordinate cc1 = converter.convertBack(c1);
-			Coordinate cc2 = converter.convertBack(c2);
-
-			assertDoubleEq(c1.getCentralAngle(c2), c2.getCentralAngle(c1));
-			assertDoubleEq(c1.getCentralAngle(cc2), cc2.getCentralAngle(c1));
-			assertDoubleEq(cc1.getCentralAngle(c2), c2.getCentralAngle(cc1));
-			assertDoubleEq(c1.getCentralAngle(cc2), c2.getCentralAngle(cc1));
+			try {
+				Coordinate c1 = newRandomCoordinate();
+				Coordinate c2 = newRandomCoordinate();
+				
+				Coordinate cc1 = converter.convertBack(c1);
+				Coordinate cc2 = converter.convertBack(c2);
+	
+				assertDoubleEq(c1.getCentralAngle(c2), c2.getCentralAngle(c1));
+				assertDoubleEq(c1.getCentralAngle(cc2), cc2.getCentralAngle(c1));
+				assertDoubleEq(cc1.getCentralAngle(c2), c2.getCentralAngle(cc1));
+				assertDoubleEq(c1.getCentralAngle(cc2), c2.getCentralAngle(cc1));
+			} catch (InvalidResultException e) {
+				fail(e.toString());
+			}
 		});
 	}
 	

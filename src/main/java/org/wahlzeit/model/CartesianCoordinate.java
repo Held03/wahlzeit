@@ -44,32 +44,48 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		assertValidDouble(z);
 	}
 
+	/**
+	 * Creates a new Cartesian coordinate with given values.
+	 * 
+	 * Contract: x, y, and z must be finite values. Returns a valid coordinate.
+	 * 
+	 * @param x the location of this coordinate along the X-axis
+	 * @param y the location of this coordinate along the Y-axis
+	 * @param z the location of this coordinate along the Z-axis
+	 */
 	public CartesianCoordinate(double x, double y, double z) {
 		super();
-		
-		if (!Double.isFinite(x) || !Double.isFinite(y) || !Double.isFinite(z))
-			throw new IllegalArgumentException("Coordinates must be finite");
+
+		// Ensure valid pre-condition of the Method contract
+		assertValidDouble(x);
+		assertValidDouble(y);
+		assertValidDouble(z);
 		
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		
+		// Ensure valid class invariant and valid post-condition
 		assertClassInvariants();
 	}
 	
 	/**
 	 * Return the Euclidean distance between this and the given coordinate.
 	 * 
+	 * Contract: <code>other</code> must be a valid coordinate, especially, <code>other</code>
+	 * must not be <code>null</code>. Returns a finite distance.
+	 * 
 	 * @param other the other coordinate to compare
 	 * @return the distance
+	 * @throws InvalidResultException thrown if the expected result can not be computed using double values
 	 */
-	public double getDistance(CartesianCoordinate other) {
-		if (other == null) {
-			throw new IllegalArgumentException("Other coordinate must not be null");
-		}
-		
-		assertClassInvariants();
+	public double getDistance(CartesianCoordinate other) throws InvalidResultException {
+		// Ensure pre-condition of the contract
+		assertValidCoordinate(other);
 		other.assertClassInvariants();
+		
+		// Ensure the class invariant
+		assertClassInvariants();
 		
 		double dx = this.x - other.x;
 		double dy = this.y - other.y;
@@ -77,43 +93,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		
 		double sqDist = dx*dx + dy*dy + dz*dz;
 		
-		return Math.sqrt(sqDist);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CartesianCoordinate other = (CartesianCoordinate) obj;
-		return isEqual(other);
-	}
-	
-	public boolean isEqual(CartesianCoordinate other) {
-		if (other == null)
-			return false;
+		double result = Math.sqrt(sqDist);
 		
-		assertClassInvariants();
-		other.assertClassInvariants();
-
-		return (cmp(x, other.x) & cmp(y, other.y) & cmp(z, other.z));
+		// Ensure post-condition of the contract
+		assertValidDoubleResult(result);
+		
+		return result;
 	}
 
 	/**
@@ -121,6 +106,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getX() {
+		// Ensure the class invariant
+		assertClassInvariants();
+		
 		return x;
 	}
 
@@ -129,6 +117,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getY() {
+		// Ensure the class invariant
+		assertClassInvariants();
+		
 		return y;
 	}
 
@@ -137,6 +128,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getZ() {
+		// Ensure the class invariant
+		assertClassInvariants();
+		
 		return z;
 	}
 
@@ -146,32 +140,41 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
+		// Ensure the class invariant
+		assertClassInvariants();
+		
 		return this;
 	}
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
+		// Ensure the class invariant
+		assertClassInvariants();
+		
 		return SphericCoordinate.fromCartesian(this);
 	}
 
 	@Override
-	public double getCartesianDistance(Coordinate other) {
-		if (other == null)
-			throw new IllegalArgumentException("Other coordinate must not be null");
+	public double getCartesianDistance(Coordinate other) throws InvalidResultException {
+		// Ensures pre-condition
+		assertValidCoordinate(other);
+
+		// Ensures the class invariant
+		assertClassInvariants();
 		
 		CartesianCoordinate ccOther = other.asCartesianCoordinate();
 		return getDistance(ccOther);
 	}
 
 	@Override
-	public double getCentralAngle(Coordinate other) {
-		if (other == null)
-			throw new IllegalArgumentException("Other coordinate must not be null");
-		
+	public double getCentralAngle(Coordinate other) throws InvalidResultException {
+		// Ensure pre-condition of the contract
+		assertValidCoordinate(other);
 		CartesianCoordinate cc = other.asCartesianCoordinate();
-		
-		assertClassInvariants();
 		cc.assertClassInvariants();
+		
+		// Ensure class invariants
+		assertClassInvariants();
 		
 		// the central angle between a and b is equal to
 		//   arctan(|a corss b| / (a dot b))
@@ -189,16 +192,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		double dpd = dpx + dpy + dpz;
 		
 		// final result
-		return Math.atan(cpd / dpd);
-	}
-
-	@Override
-	public boolean isEqual(Coordinate other) {
-		if (other == null)
-			return false;
+		double result = Math.atan(cpd / dpd);
 		
-		CartesianCoordinate ccOther = other.asCartesianCoordinate();
-		return isEqual(ccOther);
+		// Ensure post-condition
+		assertValidDoubleResult(result);
+		
+		return result;
 	}
 	
 }
