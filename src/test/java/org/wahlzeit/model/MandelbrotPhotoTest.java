@@ -53,7 +53,7 @@ public class MandelbrotPhotoTest {
 	/**
 	 * Test method for {@link org.wahlzeit.model.MandelbrotPhoto#setColorTheme(java.lang.String)}.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public final void testSetWrongColorTheme() {
 		mbp.setColorTheme(null);
 	}
