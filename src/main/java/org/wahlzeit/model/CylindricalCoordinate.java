@@ -29,17 +29,17 @@ public class CylindricalCoordinate extends AbstractCoordinate {
 	/**
 	 * The radius of the cylinder of this point. 
 	 */
-	protected double radius;
+	protected final double radius;
 	
 	/**
 	 * The azimuth of this point within the cylinder top or bottom.
 	 */
-	protected double phi;
+	protected final double phi;
 	
 	/**
 	 * The signed height of the point from the XY-plane.
 	 */
-	protected double height;
+	protected final double height;
 
 	/**
 	 * 

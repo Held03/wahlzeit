@@ -37,20 +37,21 @@ public class SphericCoordinate extends AbstractCoordinate {
 	/**
 	 * The distance for this point <code>P</code> to the origin <code>O</code>.
 	 */
-	double radius;
+	protected final double radius;
 	
 	/**
 	 * The inclination <code>θ</code>. That is the angle between the zenith and
 	 * the line from the origin <code>O</code> to this point <code>P</code>.
 	 */
-	double theta;
+	protected final double theta;
 
 	/**
 	 * The azimuth <code>φ</code>. That is the angle between the azimuth
 	 * direction and the projection of the line from the origin <code>O</code>
 	 * to this point <code>P</code> into the reference plane.
 	 */
-	double phi;
+	protected final double phi;
+	
 	
 	protected void assertValidRadius() {
 		assertValidDouble(radius);
