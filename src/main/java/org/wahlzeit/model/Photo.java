@@ -26,6 +26,7 @@ import org.wahlzeit.services.DataObject;
 import org.wahlzeit.services.EmailAddress;
 import org.wahlzeit.services.Language;
 import org.wahlzeit.services.ObjectManager;
+import org.wahlzeit.utils.PatternInstance;
 
 import com.google.api.client.util.ArrayMap;
 import com.google.appengine.api.datastore.Key;
@@ -39,6 +40,12 @@ import com.googlecode.objectify.annotation.Parent;
  * A photo represents a user-provided (uploaded) photo.
  */
 @Entity
+@PatternInstance(
+		patternName = "Abstract Factory",
+		participants = {
+			"AbstractProduct"
+		}
+	)
 public class Photo extends DataObject {
 
 	/**

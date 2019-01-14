@@ -9,9 +9,17 @@
  */
 package org.wahlzeit.model;
 
+import org.wahlzeit.utils.PatternInstance;
+
 /**
  * 
  */
+@PatternInstance(
+			patternName = "Abstract Factory",
+			participants = {
+				"ConcreteProduct"
+			}
+		)
 public class MandelbrotPhoto extends Photo {
 
 	/**
