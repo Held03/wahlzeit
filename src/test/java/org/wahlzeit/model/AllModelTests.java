@@ -18,6 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	PhotoFilterTest.class,
 	TagsTest.class,
 	UserStatusTest.class,
+	MandelbrotTest.class,
+	MandelbrotTypeTest.class,
 	ValueTest.class })
 public class AllModelTests {
 

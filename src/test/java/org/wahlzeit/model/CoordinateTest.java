@@ -81,7 +81,7 @@ public class CoordinateTest {
            });
     }
 	
-	private static final int REPEAT_COUNT = 0x10_0000;
+	private static final int REPEAT_COUNT = 0x1_0000;
 	
 	/**
 	 * Double significant precision

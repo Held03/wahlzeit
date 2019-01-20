@@ -10,8 +10,7 @@
 package org.wahlzeit.model;
 
 /**
- * @author cryptjar
- *
+ * Specifies the different types of Mandelbrot images.
  */
 public class MandelbrotType {
 	protected final MandelbrotType superType;
@@ -30,7 +29,12 @@ public class MandelbrotType {
 	 * @return <code>true</code> if this type is a descendant of the given type
 	 */
 	public boolean isSubtypeOf(MandelbrotType type) {
-		return this.equals(type) || this.superType.equals(type) || this.superType.isSubtypeOf(type);
+		if (this.equals(type) || type == superType)
+			return true;
+		if (superType == null)
+			return false;
+		
+		return  this.superType.equals(type) || this.superType.isSubtypeOf(type);
 	}
 
 }

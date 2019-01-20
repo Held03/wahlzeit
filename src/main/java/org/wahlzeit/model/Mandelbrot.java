@@ -10,18 +10,29 @@
 package org.wahlzeit.model;
 
 /**
- * 
+ * Specifies a Mandelbrot image.
  */
 public class Mandelbrot {
+	/**
+	 * The type of this Mandelbrot.
+	 */
 	protected final MandelbrotType type;
 
 	/**
 	 * 
 	 */
 	public Mandelbrot(MandelbrotType type) {
+		if (type == null) {
+			throw new IllegalArgumentException("Type must not be null");
+		}
+		
 		this.type = type;
 	}
 
+	/**
+	 * Returns the type of this Mandelbrot.
+	 * @return the type of this instance
+	 */
 	public  MandelbrotType getType() {
 		return type;
 	}
